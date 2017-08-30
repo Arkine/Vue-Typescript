@@ -3,7 +3,8 @@
 		<img src="./assets/logo.png">
 		<!-- <MyCheckbox :title="checkbox.title" :value="checkbox.value"  v-model="checkbox.checked" /> -->
 		<!-- <button @click="sumUp">Count {{ count.acum }}</button> -->
-		<Users />
+		<!-- <Users /> -->
+		<!-- <button @click="handler">Click</button> -->
 	</div>
 </template>
 
@@ -61,21 +62,95 @@ import axios from 'axios'
 // }
 
 
-const Log = createDecorator((component, key) => {
-	console.log("component: ", component);
-	console.log("key: ", key);
+const Log = (msg?: string) => {
+	return createDecorator((component, key) => {
+		console.log("component: ", component);
+		console.log("key: ", key);
+		console.log("msg: ", msg);
+	})
+}
+
+const NoCache = createDecorator((comp: any , key) => {
+	comp.computed[key].cache = false
 })
 
-@Component
-export default class App extends Vue {
-	@Log
-	name = 'Paco'
+// @Component
+// export default class App extends Vue {
+// 	@Log('yooo')
+// 	name = 'Paco'
 
-	@Log
-	get message() {
-		return 'hi!'
-	}
-}
+// 	@Log()
+// 	@NoCache
+// 	get message() {
+// 		return 'hi!'
+// 	}
+// }
+
+// import {
+// 	AdvicePool,
+// 	adviceParam,
+// 	onException,
+// 	beforeMethod,
+// 	afterMethod,
+// 	adviceMetadata,
+// 	IMetadata
+// } from 'kaop-ts'
+
+// class Advices extends AdvicePool {
+// 	static getCached(@adviceMetadata metadata: IMetadata, @adviceParam(0) prop) {
+// 		console.log('before executed');
+// 		const key = `${metadata.scope.$options.name}_${metadata.propertyKey}`;
+// 		const cached = localStorage.getItem(key)
+
+// 		if (cached) {
+// 			metadata.scope[prop] = cached
+// 			this.stop();
+// 		}
+// 	}
+
+// 	static setCache(@adviceMetadata metadata: IMetadata, @adviceParam(0) prop) {
+// 		console.log('after executed');
+// 		const key = `${metadata.scope.$options.name}_${metadata.propertyKey}`;
+// 		if (metadata.result) {
+// 			metadata.result.then(() => {
+// 				localStorage.setItem(key, metadata.scope[prop])
+// 			})
+// 		}
+// 	}
+
+// 	static notify(@adviceParam(0) toServer){
+// 		if (toServer) {
+// 			console.log('http call to server...')
+// 		} else {
+// 			console.log('Notifying to client')
+
+// 		}
+// 	}
+
+// 	static report(@adviceMetadata metadata: IMetadata) {
+// 		console.error('Reporting... ', metadata.exception);
+// 	}
+// }
+
+// @Component
+// export default class App extends Vue {
+// 	userName = ''
+
+// 	@beforeMethod(Advices.getCached, 'userName')
+// 	@onException(Advices.report)
+// 	@afterMethod(Advices.setCache, 'userName')
+// 	@afterMethod(Advices.notify, false)
+// 	handler() {
+// 		console.log('method executed');
+// 		throw Error('Terrible error');
+// 		// return fetch('https://jsonplacehol der.typicode.com/users/1')
+// 		// 	.then(res => res.json())
+// 		// 	.then(user => {
+// 		// 		this.userName = user.name
+
+// 		// 	});
+// 	}
+// }
 
 </script>
 
